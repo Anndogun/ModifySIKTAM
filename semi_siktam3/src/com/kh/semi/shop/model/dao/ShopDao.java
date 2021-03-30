@@ -111,7 +111,7 @@ public class ShopDao {
 		} catch (SQLException e) {
 			System.out.println(sql + "확인");
 			e.printStackTrace();
-		} finally {
+		} finally { 
 			close(pstmt);
 		}
 		return result;
@@ -163,6 +163,7 @@ public class ShopDao {
 		}else {
 			line_up = "1";
 		}
+		
 		
 		
 		if (keyword == null) {

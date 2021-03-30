@@ -71,10 +71,10 @@
             
             <tr id="tr3">
                 <td class="table-rowName">가격대</td>
-                <td><input type="checkbox" value="10000" id='c1' class="table-check" name="price" ><label for='c1'>10,000원 이하</label></td>
-                <td><input type="checkbox" value="10000~20000" id='c2' class="table-check" name="price" ><label for='c2'>10,000 ~ 20,000원</label></td>
-                <td><input type="checkbox" value="20000~30000" id='c3' class="table-check" name="price" ><label for='c3'>20,000 ~ 30,000원</label></td>
-                <td><input type="checkbox" value="30000" id='c4' class="table-check" name="price" ><label for='c4'>30,000원 이상</label></td>
+                <td><input type="checkbox" value="10000" id='c1' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c1'>10,000원 이하</label></td>
+                <td><input type="checkbox" value="10000~20000" id='c2' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c2'>10,000 ~ 20,000원</label></td>
+                <td><input type="checkbox" value="20000~30000" id='c3' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c3'>20,000 ~ 30,000원</label></td>
+                <td><input type="checkbox" value="30000" id='c4' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c4'>30,000원 이상</label></td>
                 <td></td>
             </tr>
         </table>
@@ -126,6 +126,7 @@
 		function search(){
 	 		 location.href="<%=request.getContextPath()%>/searchMain.sc?keyword="+$('#search-text').val(); 
 		}
+		
 		$(function(){
 			
 			$("#tbl td").mouseenter(function(){
@@ -140,27 +141,83 @@
 		});
 	</script>
 	
-	<script>
-		$('#line_up').children().click(function(){
-			var index = $('#line_up').children().index(this);
+    <script>
+    	
+	    function table() {
+	    	var tlist = [];
+	    	$("input[name='table']:checked").each(function(i) {
+	             tlist.push($(this).val());
+	             console.log(tlist);
+	        });
+	    	
+	    	return tlist;
+	    }
+	    
+	    
+	    function category() {
+	    	var clist = [];
+	    	$("input[name='category']:checked").each(function(i) {
+	            clist.push($(this).val());
+	            console.log(clist);
+	        });
+	    	
+	    	return clist;
+	    }
+	    
+	    function doubleCheck(index) {
+	    	var priceCheckbox = document.getElementsByName("price");
+	    	for(var i = 0; i < priceCheckbox.length; i++){
+	    		if(priceCheckbox[i] != index){
+	    			priceCheckbox[i].checked = false;
+	    		}
+	    		
+	    	}
+	    }
+	    
+	    function price() {
+	    	var plist = [];
+	    	
+	    	$("input[name='price']:checked").each(function(i) {
+	    		
+	            plist.push($(this).val());
+	            console.log(plist);
+	        });
+	    	
+	    	return plist;
+	    }
+	    
+	    function sortBy() {   	
+	    	var index = $('#line_up').children().index(this);
 			var line = $('#line_up').children().eq(index).text();
-			
-			 var key = '<%=skeyword%>'
-			 var tlist = [];
-		     var clist = [];
-		     var plist = [];
-		     
-		     console.log(line);
-		     $("input[name='table']:checked").each(function(i){
-		            tlist.push($(this).val());
-		     });
-		     $("input[name='category']:checked").each(function(i){
-		            clist.push($(this).val());
-		     });
-		     $("input[name='price']:checked").each(function(i){
-		            plist.push($(this).val());
-		     });
-			
+	    	
+			return line;
+	    }
+	    
+	    function conditionClick(){
+	    	
+	        var tlist = table();
+	        var clist = category();
+	        var plist = price();
+	        var line = null;
+	        var key = '<%=skeyword%>'
+	        
+	        clickResult(tlist, clist, plist, key, line);
+	   
+		}
+	    
+	    function listSort() {
+	    	  var tlist = table();
+	          var clist = category();
+	          var plist = price();
+	          var line = sortBy();
+	          var key = '<%=skeyword%>'
+	          
+	          clickResult(tlist, clist, plist, key, line);
+	    }
+	    
+	   
+	    
+		function clickResult(tlist, clist, plist, key, line){
 			$.ajax({
 				url:"/siktam/SearchCondition.sc",
 				type:"get",	
@@ -169,7 +226,7 @@
 		        	"tlist" : tlist,
 		            "clist" : clist,
 		            "plist" : plist,
-		        	"line" : line,
+		            "line" : line,
 		        	"key" : key
 		        },success:function(data){
 		               console.log(data);
@@ -227,118 +284,16 @@
 		            },error:function(){
 		            	 console.log("에러");
 		            }
-			});      
+			}); 
+		}
+	
+		$('.table-check').click(function(){
+			conditionClick();
 		});
-	</script>
-   <!--  <script>
-         function check(){
-            var result = document.getElementById('table-result');
-            var tableCheck = document.getElementsByClassName("table-check");
-            result.innerHTML = "";
-
-            for(var i=0; i<tableCheck.length; i++){
-                if(tableCheck[i].checked==true){
-                    result.innerHTML += "<label for='" + tableCheck[i].id + "'>" + tableCheck[i].value + "</label>&nbsp;&nbsp;&nbsp;&nbsp;";
-                }
-            }            
-        } 
-    </script> -->
-    <script>
-    $(function(){
-    	
-    /* var line;
-    $('#line_up').children().click(function(){
-		var index = $('#line_up').children().index(this);
-		line = $('#line_up').children().eq(index).text();	
-    });	 */
-    $('.table-check').click(function(){
-        var tlist = [];
-        var clist = [];
-        var plist = [];
-        
-        var key = '<%=skeyword%>'
-        
-        $("input[name='table']:checked").each(function(i){
-            tlist.push($(this).val());
-         });
-        $("input[name='category']:checked").each(function(i){
-            clist.push($(this).val());
-         });
-        $("input[name='price']:checked").each(function(i){
-            plist.push($(this).val());
-         });
-        <%-- location.href="<%=request.getContextPath()%>/SearchCondition.sc?tlist=" + tlist + "&clist=" + clist + "&plist=" +plist; --%>
-        
-         $.ajax({
-            url:"/siktam/SearchCondition.sc",
-            type:"get",
-            traditional : true, 
-            data:{
-               "tlist" : tlist,
-               "clist" : clist,
-               "plist" : plist,
-               "key" : key
-            },success:function(data){
-               console.log(data);
-               $('#tbl').find('tr').remove();
-               for(var i=0; i<data.length; i++){
-            	   var $tr = $('<tr>');
-            	   var $shopPid = $('<td style="display:none">').text(data[i].shopPid);
-            	   var $tdI = $('<td id="img">');
-            	   var $shopImg = $('<img src="/siktam/resources/images/'+data[i].shopImg+'"  style="width:100%" alt="Image" class="img-thumbnail">');
-            	   var $tdT = $('<td id="txt"  style="word-break:break-all">');
-            	   var $h4 = $('<h4>');
-            	   var $shopName = $('<b>').text(data[i].shopName);
-            	   var $ul = $('<ul>');
-            	   var $li = $('<li>');
-            	   var $li2 = $('<li>');
-            	   var $star = $('<span class="star">').text("★" +data[i].star);
-            	   var $reviewCount = $('<span class="review_num">').text("리뷰 " +data[i].reviewCount);
-            	   var $reservationCount = $('<span class="reserve_num">').text("예약 " + data[i].reservationCount);
-            	   var $shopAddr = $('<span class="area">').text(data[i].shopAddr);
-            	   var $tableType = $('<span class="tableInfo">').text(data[i].tableType);
-            	   var $MenuCategory = $('<span class="sectors">').text(data[i].MenuCategory);
-            	   /* var $li3 = $('<li>');
-            	   var $mainMenu = $('<span class="mainMenu">'); */
-            	   $tdI.append($shopImg);
-            	   
-            	   $h4.append($shopName);
-            	   
-            	   $li.append($star).append($reviewCount).append($reservationCount);
-            	   $li2.append($shopAddr).append($shopAddr).append($tableType).append($MenuCategory);
-            	   $ul.append($li);
-            	   $ul.append($li2);
-            	   
-            	   $tdT.append($h4);
-            	   $tdT.append($ul);
-            	   
-            	   $tr.append($shopPid);
-            	   $tr.append($tdI);
-            	   $tr.append($tdT);
-            	   
-            	   $('#tbl').append($tr);
-            	   
-            	   $(function(){
-           			
-           			$("#tbl td").mouseenter(function(){
-           				$(this).parent().css({"background":"lightgray", "cursor":"pointer"});
-           			}).mouseout(function(){
-           				$(this).parent().css({"background":"white"});
-           			}).click(function(){
-           				//console.log($(this).parent().children().eq(0).text());
-           				var shopPid = $(this).parent().children().eq(0).text();
-           				location.href="<%=request.getContextPath()%>/sSelect.so?shopPid=" + shopPid;
-           			});
-           		});
-               } 
-               	   	
-            },error:function(){
-            	 console.log("에러");
-            }
-          }); 
-     }); 
-    });
-   
+		
+		$('#line_up').children().click(function(){
+				listSort();
+		});
     </script>
     </div>
 </div>
