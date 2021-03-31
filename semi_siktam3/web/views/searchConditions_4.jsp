@@ -71,7 +71,7 @@
             
             <tr id="tr3">
                 <td class="table-rowName">가격대</td>
-                <td><input type="checkbox" value="10000" id='c1' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c1'>10,000원 이하</label></td>
+                <td><input type="checkbox" value="0~10000" id='c1' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c1'>10,000원 이하</label></td>
                 <td><input type="checkbox" value="10000~20000" id='c2' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c2'>10,000 ~ 20,000원</label></td>
                 <td><input type="checkbox" value="20000~30000" id='c3' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c3'>20,000 ~ 30,000원</label></td>
                 <td><input type="checkbox" value="30000" id='c4' class="table-check" name="price" onclick='doubleCheck(this)'><label for='c4'>30,000원 이상</label></td>
@@ -175,11 +175,11 @@
 	    }
 	    
 	    function price() {
-	    	var plist = [];
+	    	var plist;
 	    	
 	    	$("input[name='price']:checked").each(function(i) {
 	    		
-	            plist.push($(this).val());
+	            plist = $(this).val();
 	            console.log(plist);
 	        });
 	    	

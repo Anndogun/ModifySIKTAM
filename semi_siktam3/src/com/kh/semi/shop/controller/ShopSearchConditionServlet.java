@@ -41,15 +41,16 @@ public class ShopSearchConditionServlet extends HttpServlet {
 			String keyword = request.getParameter("key");
 			String[] tlist = request.getParameterValues("tlist");
 			String[] clist = request.getParameterValues("clist");
-			String[] plist = request.getParameterValues("plist");			
+			String price = request.getParameter("plist");			
 			String line = request.getParameter("line");
-				
-			System.out.println(keyword);
-			System.out.println("line : " + line );
 				
 			keyword = nullCheck(keyword);
 			line = nullCheck(line);
-				
+			price = nullCheck(price);
+			
+			String[] plist = price(price);
+			
+			
 			ArrayList<ShopSearch> list = new ShopService().SearchCondition(keyword,line,tlist,clist,plist);
 				
 			for(ShopSearch sc : list) {
@@ -65,6 +66,13 @@ public class ShopSearchConditionServlet extends HttpServlet {
 			return null;
 		}
 		return word;
+	}
+	
+	public String[] price(String price) {
+		
+		String[] plist = price.split("~");
+		
+		return plist;
 	}
 	
 	public String selectQuery() {
@@ -93,13 +101,36 @@ public class ShopSearchConditionServlet extends HttpServlet {
     	return fromQuery;
     }
     
-    public String titleSearch() {
-    	
-    	
-    	return null;
+    public String localSearchQuery(String keyword) {
+    	SelectQueryMaker localSearch = new SelectQueryMaker.Builder().columnName("SHOP_ADDR").like().bothPattern(keyword).enter().build();
+    	String localSearchQuery = localSearch.getQuery().toString();
+    	return localSearchQuery;
     }
     
-    public String 
+    public String titleSearchQuery(String[] tlist) {
+    	SelectQueryMaker titleSearch = new SelectQueryMaker.Builder().columnName("TABLE_TYPE").in().condition(tlist).enter().build();
+    	String titleSearchQuery = titleSearch.getQuery().toString();
+    	return titleSearchQuery;
+    }
+    
+    public String categorySearchQuery(String[] clist) {
+    	SelectQueryMaker categorySearch = new SelectQueryMaker.Builder().columnName("MENU_CATEGORY").in().condition(clist).enter().build();
+    	String categorySearchQuery = categorySearch.getQuery().toString();
+    	return categorySearchQuery;
+    }
+    
+    public String priceSearchQuery(String[] plist) {
+    	SelectQueryMaker priceSearch = null;
+    	if(plist.length == 2) {
+    		priceSearch =  new SelectQueryMaker.Builder().columnName("AVG_PAY").betweenAnd(plist[0], plist[1]).enter().build();
+    	}else {
+    		priceSearch = new SelectQueryMaker.Builder().columnName("AVG_PAY").inequalityLeft(plist[0]).enter().build();
+    	}
+    	String priceSearchQuery = priceSearch.getQuery().toString();
+    	return priceSearchQuery;
+    }
+    
+    
     public String whereQuery() {
     	
     	String whereQuery = "";
