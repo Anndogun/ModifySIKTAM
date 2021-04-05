@@ -29,7 +29,7 @@ public class ShopService {
 		ArrayList<ShopSearch> list = null;
 		
 		
-			list=new ArrayList<ShopSearch>();
+			list = new ArrayList<ShopSearch>();
 			list = sDao.searchMain(con,keyword);
 		
 		close(con);
