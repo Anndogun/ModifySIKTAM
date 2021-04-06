@@ -38,22 +38,15 @@ public class ShopSearchConditionServlet extends HttpServlet {
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json; charset=UTF-8");
 				
-			String keyword = request.getParameter("key");
-			String[] tlist = request.getParameterValues("tlist");
-			String[] clist = request.getParameterValues("clist");
-			String priceRange = request.getParameter("plist");			
-			String line = request.getParameter("line");
-			String[] plist = null;
-			
-			System.out.println("keyword : " + keyword);
-			System.out.println("line : " + line);
+			String keyword = request.getParameter("key");			// 검색창 지역 검색 키워드
+			String[] tlist = request.getParameterValues("tlist");	// 테이블 타입 list
+			String[] clist = request.getParameterValues("clist");	// 메뉴 카테고리 list
+			String priceRange = request.getParameter("plist");		// 메뉴 평균 가격대	
+			String line = request.getParameter("line");				// 정렬 키워드
+			String[] plist = null;									// 가격대 list
 			
 			keyword = nullCheck(keyword);
 			line = nullCheck(line);
-//			priceRange = nullCheck(priceRange);
-			
-			System.out.println("keyword : " + keyword);
-			System.out.println("line : " + line);
 			
 			if (priceRange != null) {
 				plist = priceRange(priceRange);
@@ -70,6 +63,11 @@ public class ShopSearchConditionServlet extends HttpServlet {
 				
 	}
 	
+	/**
+	 * null 체크
+	 * ajax에서 값이 null을 넘기면
+	 * 문자열 null, 공백으로 들어옴
+	 */
 	public String nullCheck(String word) {
 		System.out.println(word);
 		if (word.equals("null") || word.equals("") || word == null) {
@@ -78,6 +76,10 @@ public class ShopSearchConditionServlet extends HttpServlet {
 		return word;
 	}
 	
+	/**
+	 *  0 ~ 10000 이런 식으로 들어오는 문자열을
+	 *  쿼리문에 쓸 수 있도록 불리
+	 */
 	public String[] priceRange(String price) {
 		if (price == null) {
 			return null;

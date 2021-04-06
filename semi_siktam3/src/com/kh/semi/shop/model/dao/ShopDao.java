@@ -117,6 +117,9 @@ public class ShopDao {
 		return result;
 	}
 
+	/**
+	 * 업체 조건 검색
+	 */
 	public ArrayList<ShopSearch> SearchCondition(Connection con, String keyword, String line, String[] tlist, String[] clist, String[] plist) {
 		ArrayList<ShopSearch> list = null;
 		PreparedStatement pstmt = null;
@@ -163,6 +166,9 @@ public class ShopDao {
 		return list;
 	}
 	
+	/**
+	 * 업체 조건 검색 select 절
+	 */
 	public String selectQuery() {
 		
 		SelectQueryMaker select = new SelectQueryMaker.Builder().select().column("S.SHOP_PID").comma()
@@ -177,6 +183,9 @@ public class ShopDao {
 		
 	}
 	
+    /**
+     * 업체 조건 검색 from 절
+     */
     public String fromQuery() {
     	
     	SelectQueryMaker from = new SelectQueryMaker.Builder().from().tableName("Shop").as("S").Leftjoin().tableName("REVIEW").as("RE").on()
@@ -188,18 +197,30 @@ public class ShopDao {
     	return fromQuery;
     }
     
+    /**
+     * where절
+     * 검색창 검색 키워드 검색 쿼리
+     */
     public String localSearchQuery(String keyword) {
     	SelectQueryMaker localSearch = new SelectQueryMaker.Builder().columnName("SHOP_ADDR").like().bothPattern(keyword).enter().build();
     	String localSearchQuery = localSearch.getQuery().toString();
     	return localSearchQuery;
     }
     
+    /**
+     * where 절
+     * tableType 검색 쿼리문
+     */
     public String tableTypeSearchQuery(String[] tlist) {
     	SelectQueryMaker tableTypeSearch = new SelectQueryMaker.Builder().columnName("TABLE_TYPE").in().condition(tlist).enter().build();
     	String tableTypeSearchQuery = tableTypeSearch.getQuery().toString();
     	return tableTypeSearchQuery;
     }
     
+    /**
+     * where 절
+     * menu category 검색 쿼리문
+     */
     public String categorySearchQuery(String[] clist) {
     	SelectQueryMaker categorySearch = new SelectQueryMaker.Builder().columnName("MENU_CATEGORY").in().condition(clist).enter().build();
     	String categorySearchQuery = categorySearch.getQuery().toString();
@@ -207,6 +228,10 @@ public class ShopDao {
     	return categorySearchQuery;
     }
     
+    /**
+     * where 절
+     * 평균 가격대 검색 쿼리문
+     */
     public String priceSearchQuery(String[] plist) {
     	SelectQueryMaker priceSearch = null;
     	if (plist.length == 2) {
@@ -218,6 +243,11 @@ public class ShopDao {
     	return priceSearchQuery;
     }
     
+    /**
+     * where 절
+     * 검색 키워드 / tableType / menu category / 평균 가격대 
+     * 쿼리문 리스트 저장
+     */
     public ArrayList<String> whereQueryList(String keyword, String[] tlist, String[] clist, String[] plist) {
     	ArrayList<String> whereQueryList = new ArrayList<>();
     	
@@ -244,6 +274,10 @@ public class ShopDao {
     	return whereQueryList;
     }
     
+    /**
+     * 종합 where 절
+     * 검색 리스트 통합
+     */
     public String whereQuery(String keyword, String[] tlist, String[] clist, String[] plist) {
     	ArrayList<String> whereQueryList = whereQueryList(keyword, tlist, clist, plist);
     	int length = whereQueryList.size();
@@ -270,6 +304,10 @@ public class ShopDao {
     	return whereQuery;
     }
     
+    /**
+     * group by 절
+     * @return
+     */
     public String groupByQuery() {
 	   
 	    SelectQueryMaker groupBy = new SelectQueryMaker.Builder().groupBy().column("RE.SHOP_PID").comma().column("S.SHOP_PID").comma().column("S.SHOP_IMG").comma()
@@ -280,6 +318,10 @@ public class ShopDao {
 	    return groupByQuery;
     } 
    
+    /**
+     * order by절
+     * 정렬 순서 키워드에 따른 정렬 쿼리문
+     */
     public String orderByKeyword(String line) {
 	   
 	    String orderByKeyword = null;
@@ -297,6 +339,9 @@ public class ShopDao {
 	     return orderByKeyword;
     }
    
+    /**
+     * order by졸
+     */
     public String orderByQuery(String orderbyKeyword) {
 	   
 	    SelectQueryMaker orderBy = new SelectQueryMaker.Builder().orderBy().columnName(orderbyKeyword).desc().build();
@@ -305,6 +350,9 @@ public class ShopDao {
 	    return orderByQuery;
     }
     
+    /**
+     * 검색 쿼리문 종합
+     */
     public String shopSearchQuery (String keyword, String line, String[] tlist, String[] clist, String[] plist) {
     	StringBuilder ShopSearchQuery = new StringBuilder();
     	
