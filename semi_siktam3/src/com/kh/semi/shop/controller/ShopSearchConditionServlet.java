@@ -63,7 +63,6 @@ public class ShopSearchConditionServlet extends HttpServlet {
 				
 	}
 	
-	
 	/**
 	 * null 체크
 	 * ajax에서 값이 null을 넘기면
