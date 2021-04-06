@@ -149,13 +149,9 @@ public class ShopDao {
 				sc.setShopAddr(rset.getString("SHOP_ADDR"));
 				sc.setTableType(rset.getString("TABLE_TYPE"));
 				sc.setMenuCategory(rset.getString("MENU_CATEGORY"));
-//				sc.setMainMenu(rset.getString(""));
 
 				list.add(sc);
 			}
-
-			System.out.println(list);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
