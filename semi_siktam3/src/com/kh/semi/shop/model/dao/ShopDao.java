@@ -220,9 +220,6 @@ public class ShopDao {
     
     public ArrayList<String> whereQueryList(String keyword, String[] tlist, String[] clist, String[] plist) {
     	ArrayList<String> whereQueryList = new ArrayList<>();
-    	for (String c : clist) {
-    		System.out.println("어레이 c" + c);
-    	}
     	
     	if (keyword != null) {
     		whereQueryList.add(localSearchQuery(keyword));
@@ -309,11 +306,6 @@ public class ShopDao {
     }
     
     public String shopSearchQuery (String keyword, String line, String[] tlist, String[] clist, String[] plist) {
-    	
-    	for (String c : clist) {
-    		System.out.println(c);
-    	}
-    	
     	StringBuilder ShopSearchQuery = new StringBuilder();
     	
     	ShopSearchQuery.append(selectQuery()).append(fromQuery());
@@ -325,10 +317,10 @@ public class ShopDao {
     	
     	ShopSearchQuery.append(groupByQuery());
     	
-    	String orderByQuery = orderByQuery(line);
+    	String orderByKeyword = orderByKeyword(line);
     	
-    	if (orderByQuery != null) {
-    		ShopSearchQuery.append(orderByQuery);
+    	if (orderByKeyword != null) {
+    		ShopSearchQuery.append(orderByQuery(orderByKeyword));
     	}
     	
     	String query = ShopSearchQuery.toString();

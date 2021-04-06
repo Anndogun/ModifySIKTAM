@@ -45,9 +45,15 @@ public class ShopSearchConditionServlet extends HttpServlet {
 			String line = request.getParameter("line");
 			String[] plist = null;
 			
+			System.out.println("keyword : " + keyword);
+			System.out.println("line : " + line);
+			
 			keyword = nullCheck(keyword);
 			line = nullCheck(line);
 //			priceRange = nullCheck(priceRange);
+			
+			System.out.println("keyword : " + keyword);
+			System.out.println("line : " + line);
 			
 			if (priceRange != null) {
 				plist = priceRange(priceRange);

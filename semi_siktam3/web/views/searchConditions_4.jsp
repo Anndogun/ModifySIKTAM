@@ -147,7 +147,6 @@
 	    	var tlist = [];
 	    	$("input[name='table']:checked").each(function(i) {
 	             tlist.push($(this).val());
-	             console.log(tlist);
 	        });
 	    	
 	    	return tlist;
@@ -158,7 +157,6 @@
 	    	var clist = [];
 	    	$("input[name='category']:checked").each(function(i) {
 	            clist.push($(this).val());
-	            console.log(clist);
 	        });
 	    	
 	    	return clist;
@@ -178,45 +176,32 @@
 	    	var plist;
 	    	
 	    	$("input[name='price']:checked").each(function(i) {
-	    		
 	            plist = $(this).val();
-	            console.log(plist);
 	        });
 	    	
 	    	return plist;
 	    }
 	    
-	    function sortBy() {   	
-	    	var index = $('#line_up').children().index(this);
-			var line = $('#line_up').children().eq(index).text();
+	    function sortBy(index) {
+	    	if (index == null){
+	    		return null;
+	    	}
 	    	
+			var line = $('#line_up').children().eq(index).text();
 			return line;
 	    }
 	    
-	    function conditionClick(){
-	    	
-	        var tlist = table();
+	    function conditionClick(index) {
+	    	console.log(index)
+	    	var tlist = table();
 	        var clist = category();
 	        var plist = price();
-	        var line = null;
+	        var line = sortBy(index);
 	        var key = '<%=skeyword%>'
-	        
-	        clickResult(tlist, clist, plist, key, line);
-	   
-		}
-	    
-	    function listSort() {
-	    	  var tlist = table();
-	          var clist = category();
-	          var plist = price();
-	          var line = sortBy();
-	          var key = '<%=skeyword%>'
 	          
-	          clickResult(tlist, clist, plist, key, line);
+	        clickResult(tlist, clist, plist, key, line);
 	    }
-	    
 	   
-	    
 		function clickResult(tlist, clist, plist, key, line){
 			$.ajax({
 				url:"/siktam/SearchCondition.sc",
@@ -229,7 +214,6 @@
 		            "line" : line,
 		        	"key" : key
 		        },success:function(data){
-		               console.log(data);
 		               $('#tbl').find('tr').remove();
 		               for(var i=0; i<data.length; i++){
 		            	   var $tr = $('<tr>');
@@ -288,11 +272,12 @@
 		}
 	
 		$('.table-check').click(function(){
-			conditionClick();
+			conditionClick(null);
 		});
 		
 		$('#line_up').children().click(function(){
-				listSort();
+			var index = $('#line_up').children().index(this);
+			conditionClick(index);
 		});
     </script>
     </div>
