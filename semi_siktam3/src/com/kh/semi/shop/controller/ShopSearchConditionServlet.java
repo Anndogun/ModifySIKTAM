@@ -89,8 +89,6 @@ public class ShopSearchConditionServlet extends HttpServlet {
 		
 		return plist;
 	}
-	
-	
    
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
